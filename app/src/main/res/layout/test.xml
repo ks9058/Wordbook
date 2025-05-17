@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <ImageView
+        android:id="@+id/animals_top_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/animals_top_img"/>
+    <TextView
+        android:id="@+id/title_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="외워봐 단어장"
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        android:gravity="center"
+        android:fontFamily="@font/jua"/>
+    <ImageView
+        android:id="@+id/animals_bottom_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/animals_bottom_img"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/word_test_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/solid_button"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="30dp"
+                android:text="단어로\n시험"
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                android:fontFamily="@font/jua"/>
+            <Button
+                android:id="@+id/meaning_test_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/solid_button"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="15dp"
+                android:text="뜻으로\n시험"
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                android:fontFamily="@font/jua"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/choice_vocabulary_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/solid_button"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:padding="15dp"
+                android:text="단어장 선택"
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                android:fontFamily="@font/jua"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+</LinearLayout>
