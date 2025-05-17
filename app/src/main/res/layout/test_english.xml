@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:background="#D9D9D9"
+        android:text="00:00"
+        android:textColor="#000000"
+        android:textSize="40dp"
+        android:gravity="center"
+        android:fontFamily="@font/jua"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/test_word"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="영어 뜻"
+            android:textColor="@color/black"
+            android:textSize="40dp"
+            android:gravity="center"
+            android:fontFamily="@font/jua"/>
+
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:columnCount="2"
+            android:rowCount="2"
+            android:layout_margin="30dp">
+
+            <Button
+                android:id="@+id/choice_number1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_margin="10dp"
+                android:text="선지1"
+                android:textColor="@color/black"
+                android:textSize="40dp"
+                android:fontFamily="@font/jua"
+                android:background="@drawable/solid_button"/>
+            <Button
+                android:id="@+id/choice_number2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_margin="10dp"
+                android:text="선지2"
+                android:textColor="@color/black"
+                android:textSize="40dp"
+                android:fontFamily="@font/jua"
+                android:background="@drawable/solid_button"/>
+            <Button
+                android:id="@+id/choice_number3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_margin="10dp"
+                android:text="선지3"
+                android:textColor="@color/black"
+                android:textSize="40dp"
+                android:fontFamily="@font/jua"
+                android:background="@drawable/solid_button"/>
+            <Button
+                android:id="@+id/choice_number4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_margin="10dp"
+                android:text="선지4"
+                android:textColor="@color/black"
+                android:textSize="40dp"
+                android:fontFamily="@font/jua"
+                android:background="@drawable/solid_button"/>
+
+        </GridLayout>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
