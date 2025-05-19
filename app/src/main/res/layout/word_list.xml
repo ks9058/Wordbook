@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/main">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -15,22 +16,23 @@
             android:layout_margin="15dp">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/search_bar_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/search_bar" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/search"
                 android:layout_width="225dp"
                 android:layout_height="43dp"
                 android:layout_marginLeft="58dp"
                 android:layout_marginBottom="1dp"
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/transparent"
+                android:inputType="text"
                 android:hint="검색할 단어를 입력하세요."
                 android:textColorHint="#534920"
-                android:ellipsize="end"
+                android:singleLine="true"
                 android:textColor="#000000"
                 android:fontFamily="@font/jua"
                 android:textSize="20sp" />
