@@ -13,11 +13,18 @@
         android:theme="@style/Theme.Wordbook"
         tools:targetApi="31">
         <activity
+            android:name=".wordViewActivity"
+            android:parentActivityName=".wordListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".wordListActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
