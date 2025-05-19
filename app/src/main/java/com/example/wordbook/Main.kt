@@ -58,7 +58,7 @@ class Main : AppCompatActivity() {
         }
 
         testBtn.setOnClickListener {
-            //val intent = Intent(this, test::class.java)
+            val intent = Intent(this, TestActivity::class.java)
             startActivity(intent)
         }
     }
