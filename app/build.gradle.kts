@@ -6,7 +6,7 @@ plugins {
 android {
     namespace = "com.example.wordbook"
     compileSdk = 35
-
+    viewBinding.isEnabled = true
     defaultConfig {
         applicationId = "com.example.wordbook"
         minSdk = 24
