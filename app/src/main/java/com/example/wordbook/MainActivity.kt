@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         val testBtn = findViewById<Button>(R.id.test_btn)
 
         vocabBtn.setOnClickListener {
-            //val intent = Intent(this, wordbook::class.java)
+            val intent = Intent(this, WordBookActivity::class.java)
             startActivity(intent)
         }
 
