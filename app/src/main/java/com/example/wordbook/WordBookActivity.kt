@@ -1,6 +1,7 @@
 package com.example.wordbook
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,8 +9,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wordbook.databinding.AddItemBinding
@@ -27,13 +31,22 @@ class WordBookActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         var binding = WordBookBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         // gridLayout Adapter+ click이벤트
         var adapter = CustomAdapter(fileList) { clickedItem ->
             // click이벤트
-            Toast.makeText(this, "$clickedItem 폴더로 이동", Toast.LENGTH_SHORT).show()
+            //데이터베이스 구축까지 임시 value 값, value에 Book_id 넘기기
+            val wordIntent = Intent(this, wordListActivity::class.java)
+            wordIntent.putExtra("wordbook_number", 123456789)
+            startActivity(wordIntent)
 
         }
         binding.recyclerView.layoutManager = GridLayoutManager(this, 3)
@@ -158,7 +171,7 @@ class WordBookActivity : AppCompatActivity() {
     class ViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(item: String, onItemClick: (String) -> Unit) {
             binding.itemText.text = item
-            binding.itemIcon.setImageResource(R.drawable.`file_icon.png`)
+            binding.itemIcon.setImageResource(R.drawable.file_icon)
             binding.root.setOnClickListener {
                 onItemClick(item)
             }

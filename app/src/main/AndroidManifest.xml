@@ -22,6 +22,7 @@
         <activity
             android:name=".wordListActivity"
             android:exported="true"
+            android:parentActivityName=".WordBookActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainActivity"
