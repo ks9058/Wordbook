@@ -12,7 +12,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -41,9 +40,32 @@ class wordListActivity : AppCompatActivity() {
 
         //액티비티를 실행할 때 단어장 키를 받아옴
         val wordbook_number = intent.getIntExtra("wordbook_number", -1)
-        Toast.makeText(this, "$wordbook_number", Toast.LENGTH_SHORT).show()
 
-        //단어장 키를 넘기며 wordView 액티비티 실행
+        datas = mutableListOf()
+
+        if (wordbook_number != -1) {
+            val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
+
+            val cursor = db.rawQuery(
+                "SELECT Word_id, term, definition FROM Word WHERE Book_id = ?",
+                arrayOf(wordbook_number.toString())
+            )
+
+            if (cursor.moveToFirst()) {
+                do {
+                    val index = cursor.getInt(cursor.getColumnIndexOrThrow("Word_id"))
+                    val letter = cursor.getString(cursor.getColumnIndexOrThrow("term"))
+                    val mean = cursor.getString(cursor.getColumnIndexOrThrow("definition"))
+
+                    datas.add(WordItem(wordbook_number, index, letter, mean))
+                } while (cursor.moveToNext())
+            }
+
+            cursor.close()
+            db.close()
+        }
+
+        //단어장 키를 넘기며 wordView 실행
         binding.viewBtn.setOnClickListener {
             val intent = Intent(this, wordViewActivity::class.java)
             intent.putExtra("wordbook_number", wordbook_number)
@@ -67,16 +89,56 @@ class wordListActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        //임시 데이터
+        //단어 추가 버튼
+        binding.bottomBtn.setOnClickListener {
+            val dialogBinding = EditDialogLayoutBinding.inflate(layoutInflater)
 
-        datas = mutableListOf(
-            WordItem(1,"test", "테스트"),
-            WordItem(2,"hello", "world"),
-            WordItem(3, "asdf", "ㅁㄴㅇㄹ"),
-            WordItem(4, "asdf", "ㅁㄴㅇㄹ"),
-            WordItem(5, "asdf", "ㅁㄴㅇㄹ"),
-            WordItem(6, "asdf", "ㅁㄴㅇㄹ")
-        )
+            dialogBinding.titleText.text = "추가"
+            dialogBinding.editLetter.setText("")
+            dialogBinding.editLetter.hint = "단어를 입력하세요."
+            dialogBinding.editMean.setText("")
+            dialogBinding.editMean.hint = "뜻을 입력하세요."
+
+            val dialog = AlertDialog.Builder(this)
+                .setView(dialogBinding.root)
+                .create()
+
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
+
+            dialogBinding.cancelBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialogBinding.confirmBtn.setOnClickListener {
+                val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
+                db.execSQL(
+                    "INSERT INTO Word (Book_id, term, definition) VALUES (?, ?, ?)",
+                    arrayOf(wordbook_number.toString(), dialogBinding.editLetter.text.toString(), dialogBinding.editMean.text.toString())
+                )
+
+                val cursor = db.rawQuery("SELECT last_insert_rowid()", null)
+                var word_index = -1
+                if (cursor.moveToFirst()) {
+                    word_index = cursor.getInt(0)
+                }
+                cursor.close()
+                db.close()
+
+                val newItem = WordItem(
+                    book_id = wordbook_number,
+                    index = word_index,
+                    letter = dialogBinding.editLetter.text.toString(),
+                    mean = dialogBinding.editMean.text.toString()
+                )
+                datas.add(newItem)
+                adapter.notifyDataSetChanged()
+
+                dialog.dismiss()
+            }
+
+        }
+
 
         adapter = MyAdapter(datas)
         binding.recycler.layoutManager = LinearLayoutManager(this)
@@ -97,6 +159,7 @@ class wordListActivity : AppCompatActivity() {
 }
 
 data class WordItem(
+    val book_id: Int,
     val index: Int,
     val letter: String,
     val mean: String
@@ -118,7 +181,6 @@ class MyAdapter(val datas: MutableList<WordItem>):
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as MyViewHolder).binding
 
-        //position, 데이터베이서 관련해서 수정하기
         binding.wordLetter.text = datas[position].letter
         binding.meanLetter.text = datas[position].mean
 
@@ -141,11 +203,27 @@ class MyAdapter(val datas: MutableList<WordItem>):
                 dialog.dismiss()
             }
 
-            //데베관련으로 수정하기
             dialogBinding.confirmBtn.setOnClickListener {
-                binding.wordLetter.text = dialogBinding.editLetter.text
-                binding.meanLetter.text = dialogBinding.editMean.text
+                val wordbook_id = datas[position].book_id
+                val newLetter = dialogBinding.editLetter.text.toString()
+                val newMean = dialogBinding.editMean.text.toString()
+                val wordId = datas[position].index
 
+                // DB 수정
+                val db = context.openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
+                db.execSQL(
+                    "UPDATE Word SET term = ?, definition = ? WHERE Word_id = ? AND Book_id = ?",
+                    arrayOf(newLetter, newMean, wordId.toString(), wordbook_id.toString())
+                )
+                db.close()
+
+                //datas 수정
+                datas[position] = WordItem(wordbook_id, wordId, newLetter, newMean)
+
+                //RecyclerView 갱신
+                notifyItemChanged(position)
+
+                //종료
                 dialog.dismiss()
             }
 
@@ -153,10 +231,21 @@ class MyAdapter(val datas: MutableList<WordItem>):
 
         //삭제 텍스트 터치 시 삭제
         binding.deleteText.setOnClickListener {
-            val pos = holder.adapterPosition
-            if (pos != RecyclerView.NO_POSITION) {
-                datas.removeAt(pos) //데이터베이스에서 삭제하는 걸로 수정할 것
-                notifyItemRemoved(pos)
+            val position = holder.adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                val wordbook_id = datas[position].book_id
+                val wordId = datas[position].index
+                val context = holder.itemView.context
+
+                val db = context.openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
+                db.execSQL(
+                    "DELETE FROM Word WHERE Word_id = ? AND Book_id = ?",
+                    arrayOf(wordId.toString(), wordbook_id.toString())
+                )
+                db.close()
+
+                datas.removeAt(position)
+                notifyItemRemoved(position)
             }
         }
 
