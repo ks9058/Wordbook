@@ -43,8 +43,9 @@ class WordBookActivity : AppCompatActivity() {
         // gridLayout Adapter+ click이벤트
         var adapter = CustomAdapter(fileList) { clickedItem ->
             // click이벤트
-            //데이터베이스 구축까지 임시 value 값, value에 Book_id 넘기기
+
             val wordIntent = Intent(this, wordListActivity::class.java)
+            //데이터베이스 구축까지 임시 value 값, value에 Book_id 넘기기
             wordIntent.putExtra("wordbook_number", 123456789)
             startActivity(wordIntent)
 

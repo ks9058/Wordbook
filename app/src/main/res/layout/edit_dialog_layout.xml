@@ -9,6 +9,17 @@
         android:layout_height="wrap_content"
         android:src="@drawable/edit_layout" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/jua"
+        android:text="편집"
+        android:id="@+id/title_text"
+        android:textSize="36sp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#000000" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
