@@ -1,7 +1,11 @@
 package com.example.wordbook
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.database.sqlite.SQLiteConstraintException
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,12 +25,11 @@ import com.example.wordbook.databinding.GridItemBinding
 import com.example.wordbook.databinding.WordBookBinding
 
 class WordBookActivity : AppCompatActivity() {
+    lateinit var dbHelper: WordbookDbHelper
+    lateinit var db: SQLiteDatabase
+
     // ++데이터 셋++
-    val fileList = mutableListOf<String>("animal", "family", "friends", "school", "macro", "scharoy", "major", "fall",
-        "dutiful", "horizon", "scarily", "whether", "solidly", "whether", "masonry", "shudder", "finally", "grouper",
-        "hostess","gadzooks","dearest", "family", "friends", "school", "macro", "scharoy", "major", "fall",
-        "dutiful", "horizon", "scarily", "whether", "solidly", "whether", "masonry", "shudder", "finally", "grouper",
-        "hostess","gadzooks","dearest")
+    val fileList = mutableListOf<String>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +42,18 @@ class WordBookActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        dbHelper = WordbookDbHelper(this)
+        db = dbHelper.writableDatabase
+
+        fileList.clear()
+        val cursor = db.rawQuery("SELECT title FROM Wordbook", null)
+        while (cursor.moveToNext()) {
+            val title = cursor.getString(0)
+            fileList.add(title)
+        }
+        cursor.close()
+
 
         // gridLayout Adapter+ click이벤트
         var adapter = CustomAdapter(fileList) { clickedItem ->
@@ -82,9 +97,16 @@ class WordBookActivity : AppCompatActivity() {
                     val name = dialogBinding.editItemName.text.toString()
                     if(name != "")
                     {
-                        fileList.add(name)
-                        adapter.updateItems(fileList.toMutableList())
-                        Toast.makeText(applicationContext, "${name} 폴더가 추가됨", Toast.LENGTH_SHORT).show()
+                        val stmt = db.compileStatement("INSERT INTO Wordbook(title) VALUES (?)")
+                        stmt.bindString(1, name)
+                        try {
+                            stmt.executeInsert()
+                            fileList.add(name)
+                            adapter.updateItems(fileList.toMutableList())
+                            Toast.makeText(applicationContext, "${name} 폴더가 추가됨", Toast.LENGTH_SHORT).show()
+                        } catch (e: SQLiteConstraintException) {
+                            Toast.makeText(applicationContext, "이미 존재하는 이름입니다.", Toast.LENGTH_SHORT).show()
+                        }
                     }
                     else
                     {
@@ -124,10 +146,12 @@ class WordBookActivity : AppCompatActivity() {
                     val toDelete = mutableListOf<String>()
 
                     for (i in checkedItems.indices) {
-                        if(checkedItems[i])
-                        {
-                            toDelete.add(fileList[i])
+                        if (checkedItems[i]) {
+                            val title = fileList[i]
+                            db.delete("Wordbook", "title = ?", arrayOf(title)) // DB 삭제
+                            toDelete.add(title)                                // 리스트에서도 제거할 목록에 추가
                         }
+
                     }
 
                     if (toDelete.isEmpty())
@@ -199,5 +223,32 @@ class WordBookActivity : AppCompatActivity() {
         }
 
 
+    }
+}
+
+class WordbookDbHelper(context: Context) : SQLiteOpenHelper(context, "wordbook.db", null, 1) {
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL("""
+            CREATE TABLE IF NOT EXISTS Wordbook (
+                Book_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT UNIQUE
+            );
+        """.trimIndent())
+
+        db.execSQL("""
+            CREATE TABLE IF NOT EXISTS Word (
+                Word_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Book_id INTEGER,
+                term TEXT,
+                definition TEXT,
+                FOREIGN KEY(Book_id) REFERENCES Wordbook(Book_id)
+            );
+        """.trimIndent())
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        db.execSQL("DROP TABLE IF EXISTS Word")
+        db.execSQL("DROP TABLE IF EXISTS Wordbook")
+        onCreate(db)
     }
 }
