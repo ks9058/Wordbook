@@ -23,7 +23,7 @@ import com.example.wordbook.databinding.EditDialogLayoutBinding
 import com.example.wordbook.databinding.WordLayoutBinding
 import com.example.wordbook.databinding.WordListBinding
 
-class wordListActivity : AppCompatActivity() {
+class WordListActivity : AppCompatActivity() {
     lateinit var adapter: MyAdapter
     lateinit var datas: MutableList<WordItem>
 
@@ -39,16 +39,16 @@ class wordListActivity : AppCompatActivity() {
         }
 
         //액티비티를 실행할 때 단어장 키를 받아옴
-        val wordbook_number = intent.getIntExtra("wordbook_number", -1)
+        val wordbookNumber = intent.getIntExtra("wordbook_number", -1)
 
         datas = mutableListOf()
 
-        if (wordbook_number != -1) {
+        if (wordbookNumber != -1) {
             val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
 
             val cursor = db.rawQuery(
                 "SELECT Word_id, term, definition FROM Word WHERE Book_id = ?",
-                arrayOf(wordbook_number.toString())
+                arrayOf(wordbookNumber.toString())
             )
 
             if (cursor.moveToFirst()) {
@@ -57,7 +57,7 @@ class wordListActivity : AppCompatActivity() {
                     val letter = cursor.getString(cursor.getColumnIndexOrThrow("term"))
                     val mean = cursor.getString(cursor.getColumnIndexOrThrow("definition"))
 
-                    datas.add(WordItem(wordbook_number, index, letter, mean))
+                    datas.add(WordItem(wordbookNumber, index, letter, mean))
                 } while (cursor.moveToNext())
             }
 
@@ -67,8 +67,8 @@ class wordListActivity : AppCompatActivity() {
 
         //단어장 키를 넘기며 wordView 실행
         binding.viewBtn.setOnClickListener {
-            val intent = Intent(this, wordViewActivity::class.java)
-            intent.putExtra("wordbook_number", wordbook_number)
+            val intent = Intent(this, WordViewActivity::class.java)
+            intent.putExtra("wordbook_number", wordbookNumber)
             startActivity(intent)
         }
 
@@ -111,10 +111,22 @@ class wordListActivity : AppCompatActivity() {
             }
 
             dialogBinding.confirmBtn.setOnClickListener {
+
+                if(dialogBinding.editLetter.text.toString() == "" || dialogBinding.editMean.text.toString() == "") {
+                    if(dialogBinding.editLetter.text.toString() == "") {
+                        dialogBinding.editLetter.hint = "빈칸을 채워주세요."
+                    }
+                    if(dialogBinding.editMean.text.toString() == "") {
+                        dialogBinding.editMean.hint = "빈칸을 채워주세요."
+                    }
+                    return@setOnClickListener
+                }
+
                 val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
+
                 db.execSQL(
                     "INSERT INTO Word (Book_id, term, definition) VALUES (?, ?, ?)",
-                    arrayOf(wordbook_number.toString(), dialogBinding.editLetter.text.toString(), dialogBinding.editMean.text.toString())
+                    arrayOf(wordbookNumber.toString(), dialogBinding.editLetter.text.toString(), dialogBinding.editMean.text.toString())
                 )
 
                 val cursor = db.rawQuery("SELECT last_insert_rowid()", null)
@@ -126,7 +138,7 @@ class wordListActivity : AppCompatActivity() {
                 db.close()
 
                 val newItem = WordItem(
-                    book_id = wordbook_number,
+                    book_id = wordbookNumber,
                     index = word_index,
                     letter = dialogBinding.editLetter.text.toString(),
                     mean = dialogBinding.editMean.text.toString()
@@ -208,6 +220,16 @@ class MyAdapter(val datas: MutableList<WordItem>):
                 val newLetter = dialogBinding.editLetter.text.toString()
                 val newMean = dialogBinding.editMean.text.toString()
                 val wordId = datas[position].index
+
+                if(newLetter == "" || newMean == "") {
+                    if(newLetter == "") {
+                        dialogBinding.editLetter.hint = "빈칸을 채워주세요."
+                    }
+                    if(newMean == "") {
+                        dialogBinding.editMean.hint = "빈칸을 채워주세요."
+                    }
+                    return@setOnClickListener
+                }
 
                 // DB 수정
                 val db = context.openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)

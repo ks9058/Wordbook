@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.database.sqlite.SQLiteConstraintException
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordbook.databinding.AddItemBinding
 import com.example.wordbook.databinding.GridItemBinding
 import com.example.wordbook.databinding.WordBookBinding
-import java.io.File
 
 class WordBookActivity : AppCompatActivity() {
     // ++데이터 셋++
@@ -40,18 +37,42 @@ class WordBookActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        // db 참조
+
+        //  시작 시 fileList 추가
         val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
+        val cursor = db.rawQuery("SELECT title FROM Wordbook", null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val title = cursor.getString(cursor.getColumnIndexOrThrow("title"))
+                fileList.add(title)
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+
         // gridLayout Adapter+ click이벤트
         var adapter = CustomAdapter(fileList) { clickedItem ->
             // click이벤트
+            val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
+            val wordIntent = Intent(this, WordListActivity::class.java)
 
-            val wordIntent = Intent(this, wordListActivity::class.java)
-            //데이터베이스 구축까지 임시 value 값, value에 Book_id 넘기기
-            wordIntent.putExtra("wordbook_number", 123456789)
+            val cursor = db.rawQuery(
+                "SELECT Book_id FROM Wordbook WHERE title = ?",
+                arrayOf(clickedItem)
+            )
+            cursor.moveToFirst()
+            val bookId = cursor.getInt(cursor.getColumnIndexOrThrow("Book_id"))
+
+            //Book_id 넘기기
+            wordIntent.putExtra("wordbook_number", bookId)
             startActivity(wordIntent)
 
+            db.close()
+            cursor.close()
         }
+
         binding.recyclerView.layoutManager = GridLayoutManager(this, 3)
         binding.recyclerView.adapter = adapter
 
@@ -81,6 +102,7 @@ class WordBookActivity : AppCompatActivity() {
             // 추가버튼 click
             builder.setPositiveButton("추가", object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface, which: Int) {
+                    val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
                     val name = dialogBinding.editItemName.text.toString()
                     if(name != "")
                     {
@@ -99,6 +121,7 @@ class WordBookActivity : AppCompatActivity() {
                     {
                         Toast.makeText(applicationContext, "폴더 이름을 입력하세요", Toast.LENGTH_SHORT).show()
                     }
+                    db.close()
                 }
             })
             // 취소버튼 click

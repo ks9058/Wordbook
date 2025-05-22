@@ -16,11 +16,11 @@
             android:name=".WordBookActivity"
             android:exported="false" />
         <activity
-            android:name=".wordViewActivity"
+            android:name=".WordViewActivity"
             android:exported="false"
-            android:parentActivityName=".wordListActivity" />
+            android:parentActivityName=".WordListActivity" />
         <activity
-            android:name=".wordListActivity"
+            android:name=".WordListActivity"
             android:exported="true"
             android:parentActivityName=".WordBookActivity"
             android:windowSoftInputMode="adjustPan" />
