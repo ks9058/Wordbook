@@ -24,13 +24,13 @@ class TestActivity : AppCompatActivity() {
         val word_test_btn = findViewById<Button>(R.id.word_test_btn)
 
         word_test_btn.setOnClickListener {
-            //val intent = Intent(this, Test_englishActivity::class.java)
+            val intent = Intent(this, Test_englishActivity::class.java)
             //intent.putExtra("testType", 0)  // 0: 단어 맞추기
             startActivity(intent)
         }
 
         meaning_test_btn.setOnClickListener {
-            //val intent = Intent(this, Test_koreaActivity::class.java)
+            val intent = Intent(this, Test_koreaActivity::class.java)
             //intent.putExtra("testType", 1)  // 1: 뜻 맞추기
             startActivity(intent)
         }
