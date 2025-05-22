@@ -23,11 +23,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wordbook.databinding.AddItemBinding
 import com.example.wordbook.databinding.GridItemBinding
 import com.example.wordbook.databinding.WordBookBinding
+import java.io.File
 
 class WordBookActivity : AppCompatActivity() {
-    lateinit var dbHelper: WordbookDbHelper
-    lateinit var db: SQLiteDatabase
-
     // ++데이터 셋++
     val fileList = mutableListOf<String>()
 
@@ -42,19 +40,8 @@ class WordBookActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        dbHelper = WordbookDbHelper(this)
-        db = dbHelper.writableDatabase
-
-        fileList.clear()
-        val cursor = db.rawQuery("SELECT title FROM Wordbook", null)
-        while (cursor.moveToNext()) {
-            val title = cursor.getString(0)
-            fileList.add(title)
-        }
-        cursor.close()
-
-
+        // db 참조
+        val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
         // gridLayout Adapter+ click이벤트
         var adapter = CustomAdapter(fileList) { clickedItem ->
             // click이벤트
@@ -226,29 +213,4 @@ class WordBookActivity : AppCompatActivity() {
     }
 }
 
-class WordbookDbHelper(context: Context) : SQLiteOpenHelper(context, "wordbook.db", null, 1) {
-    override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("""
-            CREATE TABLE IF NOT EXISTS Wordbook (
-                Book_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT UNIQUE
-            );
-        """.trimIndent())
 
-        db.execSQL("""
-            CREATE TABLE IF NOT EXISTS Word (
-                Word_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                Book_id INTEGER,
-                term TEXT,
-                definition TEXT,
-                FOREIGN KEY(Book_id) REFERENCES Wordbook(Book_id)
-            );
-        """.trimIndent())
-    }
-
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS Word")
-        db.execSQL("DROP TABLE IF EXISTS Wordbook")
-        onCreate(db)
-    }
-}
