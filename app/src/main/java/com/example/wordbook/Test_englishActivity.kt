@@ -134,9 +134,11 @@ class Test_englishActivity : AppCompatActivity() {
         intent.putExtra("wrongCount", wrongCount)
         intent.putExtra("totalQuestions", quizList.size)
         intent.putExtra("elapsedTime", if (forceTimeOut) 10 * 60 * 1000L else 10 * 60 * 1000L - countDownTimerMillis)
+        intent.putExtra("testType", 0) // 영어 시험
         startActivity(intent)
         finish()
     }
+
 
     override fun onDestroy() {
         super.onDestroy()

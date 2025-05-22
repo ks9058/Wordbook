@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/resultpage">
 
 
 
@@ -11,11 +12,12 @@
         android:id="@+id/total_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:layout_margin="50dp"
         android:background="#D9D9D9"
         android:text="걸린시간: 00:00"
         android:textColor="#000000"
-        android:textSize="40dp"
+        android:textSize="35dp"
         android:gravity="center"
         android:fontFamily="@font/jua"/>
 
@@ -26,36 +28,48 @@
         android:gravity="center"
         android:background="@drawable/circle_background"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/total_correct_answer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="정답"
-            android:textColor="#000000"
-            android:textSize="40dp"
-            android:gravity="center"
-            android:fontFamily="@font/jua"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="/"
+            android:fontFamily="@font/jua"
+            android:text="맞힌 개수"
             android:textColor="#000000"
-            android:textSize="40dp"
-            android:gravity="center"
-            android:fontFamily="@font/jua"/>
+
+            android:textSize="30dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
         <TextView
             android:id="@+id/total_question"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="문제수"
             android:textColor="#000000"
             android:textSize="40dp"
             android:gravity="center"
             android:fontFamily="@font/jua"/>
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=" / "
+            android:textColor="#000000"
+            android:textSize="40dp"
+            android:gravity="center"
+            android:fontFamily="@font/jua"/>
+        <TextView
+            android:id="@+id/total_correct_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="정답"
+            android:textColor="#000000"
+            android:textSize="40dp"
+            android:gravity="center"
+            android:fontFamily="@font/jua"/>
+        </LinearLayout>
 
 
     </LinearLayout>
@@ -64,11 +78,11 @@
         android:id="@+id/message_cheerful"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:padding="10dp"
         android:text="응원메세지"
         android:textColor="#000000"
-        android:textSize="40dp"
+        android:textSize="38dp"
         android:gravity="center"
         android:fontFamily="@font/jua"/>
 
@@ -76,10 +90,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="2"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="60dp">
         <Button
             android:id="@+id/retry_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingTop="40dp"
@@ -89,12 +103,12 @@
             android:layout_columnWeight="1"
             android:text="다시하기"
             android:textColor="@color/black"
-            android:textSize="40dp"
+            android:textSize="35dp"
             android:fontFamily="@font/jua"
             android:background="@drawable/solid_button"/>
         <Button
             android:id="@+id/back_main_view_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingTop="40dp"
@@ -104,7 +118,7 @@
             android:layout_columnWeight="1"
             android:text="메인메뉴"
             android:textColor="@color/black"
-            android:textSize="40dp"
+            android:textSize="35dp"
             android:fontFamily="@font/jua"
             android:background="@drawable/solid_button"/>
     </GridLayout>
