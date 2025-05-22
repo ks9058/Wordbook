@@ -2,27 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/main">
+
+    <TextView
+        android:id="@+id/cycleNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:textSize="50sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/jua" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="145dp"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:background="@drawable/circle_background"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/word"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="7dp"
+            android:fontFamily="@font/jua"
+            android:gravity="center"
             android:text="단어"
             android:textColor="#000000"
-            android:textSize="40dp"
-            android:gravity="center"
-            android:fontFamily="@font/jua"/>
+            android:textSize="40dp" />
 
 
 
@@ -32,45 +45,73 @@
         android:id="@+id/meaning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:padding="10dp"
+        android:layout_marginTop="50dp"
         android:background="#FFCC00"
+        android:fontFamily="@font/jua"
+        android:gravity="center"
+        android:padding="10dp"
         android:text="뜻"
         android:textColor="#000000"
-        android:textSize="40dp"
-        android:gravity="center"
-        android:fontFamily="@font/jua"/>
+        android:textSize="40dp" />
 
-    <GridLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:layout_marginTop="90dp">
-        <Button
-            android:id="@+id/prev_page"
-            android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+
+        <GridLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="40dp"
-            android:layout_columnWeight="1"
-            android:text="이전"
-            android:textColor="@color/black"
-            android:textSize="40dp"
-            android:fontFamily="@font/jua"
-            android:background="@drawable/solid_button"/>
-        <Button
-            android:id="@+id/next_page"
-            android:layout_width="wrap_content"
+            android:columnCount="2"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <Button
+                android:id="@+id/prev_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                android:background="@drawable/solid_button"
+                android:fontFamily="@font/jua"
+                android:padding="40dp"
+                android:text="이전"
+                android:textColor="@color/black"
+                android:textSize="40dp" />
+
+            <Button
+                android:id="@+id/next_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                android:background="@drawable/solid_button"
+                android:fontFamily="@font/jua"
+                android:padding="40dp"
+                android:text="다음"
+                android:textColor="@color/black"
+                android:textSize="40dp" />
+        </GridLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/back"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="40dp"
-            android:layout_columnWeight="1"
-            android:text="다음"
-            android:textColor="@color/black"
-            android:textSize="40dp"
+            android:background="#FFCC00"
             android:fontFamily="@font/jua"
-            android:background="@drawable/solid_button"/>
-    </GridLayout>
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="그만 보기"
+            android:textColor="#000000"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
