@@ -56,7 +56,7 @@ class WordBookActivity : AppCompatActivity() {
         var adapter = CustomAdapter(fileList) { clickedItem ->
             // click이벤트
             val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
-            val wordIntent = Intent(this, wordListActivity::class.java)
+            val wordIntent = Intent(this, WordListActivity::class.java)
 
             val cursor = db.rawQuery(
                 "SELECT Book_id FROM Wordbook WHERE title = ?",

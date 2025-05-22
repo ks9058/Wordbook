@@ -31,12 +31,13 @@
         <EditText
             android:layout_width="245dp"
             android:layout_height="40dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="11dp"
             android:id="@+id/edit_letter"
             android:background="@null"
             android:fontFamily="@font/jua"
             android:inputType="text"
-            android:text="letter"
+            android:text=""
+            android:hint="단어를 입력하세요."
             android:textColor="#000000"
             android:textSize="20sp"/>
 
@@ -45,7 +46,8 @@
             android:layout_height="40dp"
             android:id="@+id/edit_mean"
             android:background="@null"
-            android:text="mean"
+            android:text=""
+            android:hint="뜻을 입력하세요."
             android:fontFamily="@font/jua"
             android:inputType="text"
             android:textColor="#000000"
