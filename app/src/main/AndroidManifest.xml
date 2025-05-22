@@ -34,6 +34,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".TestActivity" />
+        <activity android:name=".Test_koreaActivity" />
+        <activity android:name=".ResultActivity" />
+
+
     </application>
 
 </manifest>

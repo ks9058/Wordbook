@@ -30,8 +30,8 @@ class TestActivity : AppCompatActivity() {
         }
 
         meaning_test_btn.setOnClickListener {
-            //val intent = Intent(this, wordbook_choice::class.java)
-            intent.putExtra("testType", 1)  // 1: 뜻 맞추기
+            val intent = Intent(this, Test_koreaActivity::class.java)
+            //intent.putExtra("testType", 1)  // 1: 뜻 맞추기
             startActivity(intent)
         }
     }
