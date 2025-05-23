@@ -66,16 +66,42 @@ class WordBookActivity : AppCompatActivity() {
             cursor.moveToFirst()
             val bookId = cursor.getInt(cursor.getColumnIndexOrThrow("Book_id"))
 
+            val cursor2 = db.rawQuery(
+                "SELECT COUNT(*) FROM word WHERE Book_id = ?",
+                arrayOf(bookId.toString())
+            )
+            var count = 0
+            if (cursor2.moveToFirst()) {
+                count = cursor2.getInt(0)
+            }
+
             db.close()
             cursor.close()
+            cursor2.close()
 
             when(isTest) {
                 1 -> {
+                    if(count == 0) {
+                        Toast.makeText(this, "빈 단어장은 선택할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        return@CustomAdapter
+                    } else if (count < 4) {
+                        Toast.makeText(this, "단어장의 단어가 너무 적습니다.", Toast.LENGTH_SHORT).show()
+                        return@CustomAdapter
+                    }
+
                     wordIntent = Intent(this, Test_englishActivity::class.java)
                     wordIntent.putExtra("wordbook_number", bookId)
                     startActivity(wordIntent)
                 }
                 2 -> {
+                    if(count == 0) {
+                        Toast.makeText(this, "빈 단어장은 선택할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        return@CustomAdapter
+                    } else if (count < 4) {
+                        Toast.makeText(this, "단어장의 단어가 너무 적습니다.", Toast.LENGTH_SHORT).show()
+                        return@CustomAdapter
+                    }
+
                     wordIntent = Intent(this, Test_koreaActivity::class.java)
                     wordIntent.putExtra("wordbook_number", bookId)
                     startActivity(wordIntent)
