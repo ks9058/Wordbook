@@ -4,43 +4,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true">
 
-    <!-- 검색창 + 설정 아이콘 -->
     <LinearLayout
-        android:id="@+id/searchBarContainer"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <AutoCompleteTextView
-            android:id="@+id/searchView"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="50dp"
-            android:hint="검색어를 입력하세요"
-            android:drawableLeft="@android:drawable/ic_menu_search"
-            android:padding="10dp"
-            android:textSize="16dp"
-            android:background="@drawable/search_bar_background"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp">
 
-        <ImageButton
+            <ImageView
+                android:id="@+id/search_bar_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/search_bar" />
+
+            <AutoCompleteTextView
+                android:id="@+id/searchView"
+                android:layout_width="225dp"
+                android:layout_height="43dp"
+                android:layout_marginLeft="58dp"
+                android:layout_marginBottom="1dp"
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/transparent"
+                android:inputType="text"
+                android:hint="단어장 이름을 입력하세요."
+                android:textColorHint="#534920"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:fontFamily="@font/jua"
+                android:textSize="20sp" />
+
+        </FrameLayout>
+
+        <ImageView
             android:id="@+id/btnSettings"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/setting_icon"
-            android:background="@android:color/transparent"
-            android:contentDescription="setting"/>
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/menu_btn" />
     </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="12dp"/>
+        android:layout_margin="12dp"/>
 </LinearLayout>

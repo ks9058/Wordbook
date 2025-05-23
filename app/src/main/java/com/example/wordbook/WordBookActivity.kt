@@ -152,7 +152,7 @@ class WordBookActivity : AppCompatActivity() {
             // 빈 폴더일 경우
             if(fileList.isEmpty())
             {
-                Toast.makeText(this, "빈 폴더 입니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "빈 단어장 입니다.", Toast.LENGTH_SHORT).show()
                 return
             }
 
@@ -169,12 +169,24 @@ class WordBookActivity : AppCompatActivity() {
 
             builder.setPositiveButton("삭제", object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface, which: Int) {
+
+                    val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
                     val toDelete = mutableListOf<String>()
+
 
                     for (i in checkedItems.indices) {
                         if (checkedItems[i]) {
                             val title = fileList[i]
+
+                            val cursor = db.rawQuery(
+                                "SELECT Book_id FROM Wordbook WHERE title = ?",
+                                arrayOf(title)
+                            )
+                            cursor.moveToFirst()
+                            val bookId = cursor.getInt(cursor.getColumnIndexOrThrow("Book_id"))
+
                             db.delete("Wordbook", "title = ?", arrayOf(title)) // DB 삭제
+                            db.delete("Word", "Book_id = ?", arrayOf(bookId.toString()))
                             toDelete.add(title)                                // 리스트에서도 제거할 목록에 추가
                         }
 
@@ -190,6 +202,8 @@ class WordBookActivity : AppCompatActivity() {
                         adapter.updateItems(fileList.toMutableList())
                         Toast.makeText(applicationContext, "${toDelete.size}개 항목 삭제됨", Toast.LENGTH_SHORT).show()
                     }
+
+                    db.close()
                 }
             })
 
