@@ -2,7 +2,6 @@ package com.example.wordbook
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +16,7 @@ class ResultActivity : AppCompatActivity() {
         val totalQuestions = intent.getIntExtra("totalQuestions", 0)
         val elapsedTime = intent.getLongExtra("elapsedTime", 0L)
         val testType = intent.getIntExtra("testType", 0) // 0: 영어, 1: 한국어
+        val bookId = intent.getIntExtra("wordbook_number", 0)
 
         val minutes = elapsedTime / 1000 / 60
         val seconds = (elapsedTime / 1000) % 60
@@ -43,6 +43,7 @@ class ResultActivity : AppCompatActivity() {
                 else -> null
             }
             retryIntent?.let {
+                it.putExtra("wordbook_number", bookId)
                 startActivity(it)
                 finish()
             }

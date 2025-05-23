@@ -26,6 +26,7 @@ class Test_koreaActivity : AppCompatActivity() {
     private var currentIndex = 0
     private var correctCount = 0
     private var wrongCount = 0
+    private var wordbookNumber = 0
 
     private var countDownTimerMillis: Long = 10 * 60 * 1000L // 초기 10분
 
@@ -40,6 +41,8 @@ class Test_koreaActivity : AppCompatActivity() {
             insets
         }
 
+        wordbookNumber = intent.getIntExtra("wordbook_number", -1)
+
         timerText = findViewById(R.id.timer)
         startTimer()
 
@@ -52,14 +55,15 @@ class Test_koreaActivity : AppCompatActivity() {
         val quizList = mutableListOf<QuizItem>()
         val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
 
-        val cursor = db.rawQuery("SELECT * FROM Word ORDER BY RANDOM() LIMIT 20", null)
+        val cursor = db.rawQuery("SELECT * FROM Word WHERE Book_id = ? ORDER BY RANDOM() LIMIT 20",
+            arrayOf(wordbookNumber.toString()))
         while (cursor.moveToNext()) {
             val correctTerm = cursor.getString(cursor.getColumnIndexOrThrow("term"))
             val definition = cursor.getString(cursor.getColumnIndexOrThrow("definition"))
 
             val wrongCursor = db.rawQuery(
-                "SELECT term FROM Word WHERE term != ? ORDER BY RANDOM() LIMIT 3",
-                arrayOf(correctTerm)
+                "SELECT term FROM Word WHERE Book_id = ? AND term != ? ORDER BY RANDOM() LIMIT 3",
+                arrayOf(wordbookNumber.toString() ,correctTerm)
             )
 
             val choices = mutableListOf(correctTerm)
@@ -131,6 +135,7 @@ class Test_koreaActivity : AppCompatActivity() {
 
     private fun moveToResult(forceTimeOut: Boolean = false) {
         val intent = Intent(this, ResultActivity::class.java)
+        intent.putExtra("wordbook_number", wordbookNumber)
         intent.putExtra("correctCount", correctCount)
         intent.putExtra("wrongCount", wrongCount)
         intent.putExtra("totalQuestions", quizList.size)
