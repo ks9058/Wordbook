@@ -34,9 +34,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".TestActivity" />
-        <activity android:name=".Test_koreaActivity" />
-        <activity android:name=".Test_englishActivity" />
-        <activity android:name=".ResultActivity" />
+        <activity
+            android:name=".Test_koreaActivity"
+            android:parentActivityName=".TestActivity"/>
+        <activity
+            android:name=".Test_englishActivity"
+            android:parentActivityName=".TestActivity"/>
+        <activity
+            android:name=".ResultActivity"
+            android:parentActivityName=".TestActivity"/>
 
 
     </application>

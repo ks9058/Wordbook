@@ -56,7 +56,8 @@ class WordBookActivity : AppCompatActivity() {
         var adapter = CustomAdapter(fileList) { clickedItem ->
             // click이벤트
             val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
-            val wordIntent = Intent(this, WordListActivity::class.java)
+            val wordIntent:Intent
+            val isTest = intent.getIntExtra("testType", 0)
 
             val cursor = db.rawQuery(
                 "SELECT Book_id FROM Wordbook WHERE title = ?",
@@ -65,12 +66,27 @@ class WordBookActivity : AppCompatActivity() {
             cursor.moveToFirst()
             val bookId = cursor.getInt(cursor.getColumnIndexOrThrow("Book_id"))
 
-            //Book_id 넘기기
-            wordIntent.putExtra("wordbook_number", bookId)
-            startActivity(wordIntent)
-
             db.close()
             cursor.close()
+
+            when(isTest) {
+                1 -> {
+                    wordIntent = Intent(this, Test_englishActivity::class.java)
+                    wordIntent.putExtra("wordbook_number", bookId)
+                    startActivity(wordIntent)
+                }
+                2 -> {
+                    wordIntent = Intent(this, Test_koreaActivity::class.java)
+                    wordIntent.putExtra("wordbook_number", bookId)
+                    startActivity(wordIntent)
+                }
+                0 -> {
+                    wordIntent = Intent(this, WordListActivity::class.java)
+                    wordIntent.putExtra("wordbook_number", bookId)
+                    startActivity(wordIntent)
+                }
+            }
+
         }
 
         binding.recyclerView.layoutManager = GridLayoutManager(this, 3)
