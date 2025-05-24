@@ -61,5 +61,63 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, TestActivity::class.java)
             startActivity(intent)
         }
+
+
+        // 기본 단어장이 존재하는지 확인
+        val db = openOrCreateDatabase("WordbookDB", Context.MODE_PRIVATE, null)
+        val cursor = db.rawQuery("SELECT COUNT(*) FROM Wordbook", null)
+        var hasData = false
+        if (cursor.moveToFirst()) {
+            hasData = cursor.getInt(0) > 0
+        }
+        cursor.close()
+
+        if (!hasData) {
+            db.execSQL("INSERT INTO Wordbook (title) VALUES ('기본 단어장');")
+            val bookId = 1
+
+            val wordList = listOf(
+                "apple" to "사과",
+                "banana" to "바나나",
+                "cat" to "고양이",
+                "dog" to "개",
+                "elephant" to "코끼리",
+                "fish" to "물고기",
+                "grape" to "포도",
+                "house" to "집",
+                "ice" to "얼음",
+                "juice" to "주스",
+                "kite" to "연",
+                "lion" to "사자",
+                "monkey" to "원숭이",
+                "notebook" to "공책",
+                "orange" to "오렌지",
+                "pencil" to "연필",
+                "queen" to "여왕",
+                "rabbit" to "토끼",
+                "sun" to "태양",
+                "tree" to "나무",
+                "umbrella" to "우산",
+                "violin" to "바이올린",
+                "water" to "물",
+                "xylophone" to "실로폰",
+                "yogurt" to "요거트",
+                "zebra" to "얼룩말",
+                "car" to "자동차",
+                "book" to "책",
+                "flower" to "꽃",
+                "moon" to "달"
+            )
+
+            val stmt = db.compileStatement("INSERT INTO Word (Book_id, term, definition) VALUES (?, ?, ?)")
+            for ((term, definition) in wordList) {
+                stmt.bindLong(1, bookId.toLong())
+                stmt.bindString(2, term)
+                stmt.bindString(3, definition)
+                stmt.executeInsert()
+            }
+        }
+
+        db.close()
     }
 }
